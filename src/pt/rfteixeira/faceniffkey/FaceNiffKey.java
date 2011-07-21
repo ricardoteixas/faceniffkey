@@ -13,79 +13,79 @@ import android.provider.Settings;
 import android.util.Log;
 
 public class FaceNiffKey extends Activity {
-	private static final String ASDAJSHDASKDJASHKDAAUISD = "/sdcard/key";
-	private static final String ASDASDIASUDQOWOIEQEOIQWUE = "/data/data/net.ponury.faceniff/key";
+	private static final String SDCARD_KEY = "/sdcard/key";
+	private static final String PATH_KEY = "/data/data/net.ponury.faceniff/key";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
-		String kasdkasjkdajsdjkasasdasda = Settings.Secure.getString(getBaseContext().getContentResolver(), "android_id");
-		Log.d("FaceNiffKey", "ID: " + kasdkasjkdajsdjkasasdasda);
+		String id = Settings.Secure.getString(getBaseContext().getContentResolver(), "android_id");
+		Log.d("FaceNiffKey", "ID: " + id);
 
 		try {
-			String ijojjksdjasjdklaskjdjoiqwioejikdjlassadasas = Oajksdjkajskdjkasjkdjkajsdjas.klasdjaskdjasdhashdasiodhqiowe(kasdkasjkdajsdjkasasdasda);
+			String key = Unlock.decode(id);
 
-			if (ijojjksdjasjdklaskjdjoiqwioejikdjlassadasas != null) {
-				File filehasdhhiuqwuiqhujknasjkd = new File(ASDASDIASUDQOWOIEQEOIQWUE);
+			if (key != null) {
+				File file = new File(PATH_KEY);
 
-				if (filehasdhhiuqwuiqhujknasjkd.exists()) {
-					filehasdhhiuqwuiqhujknasjkd.delete();
+				if (file.exists()) {
+					file.delete();
 				}
 
-				FileWriter kjasjdajsdjajsjdquyweuiqiweioqwioeioqw = null;
+				FileWriter fileOutputStream = null;
 
 				try {
-					kjasjdajsdjajsjdquyweuiqiweioqwioeioqw = new FileWriter(ASDAJSHDASKDJASHKDAAUISD);
-					kjasjdajsdjajsjdquyweuiqiweioqwioeioqw.write(ijojjksdjasjdklaskjdjoiqwioejikdjlassadasas + "\n");
-					kjasjdajsdjajsjdquyweuiqiweioqwioeioqw.flush();
+					fileOutputStream = new FileWriter(SDCARD_KEY);
+					fileOutputStream.write(key + "\n");
+					fileOutputStream.flush();
 					
-					Process jkasdjkasjdashdjkashqwuehiqwieuqwheq = Runtime.getRuntime().exec("/system/bin/su");
-					DataOutputStream aksldlkaskdjasjkdaskldkjasldjalsdklas = new DataOutputStream(jkasdjkasjdashdjkashqwuehiqwieuqwheq.getOutputStream());
+					Process su = Runtime.getRuntime().exec("/system/bin/su");
+					DataOutputStream dataOutputStream = new DataOutputStream(su.getOutputStream());
 					
-					if (jkasdjkasjdashdjkashqwuehiqwieuqwheq == null || aksldlkaskdjasjkdaskldkjasldjalsdklas == null)
+					if (su == null || dataOutputStream == null)
 						Log.e("FaceNiffKey", "CAN NOT RUN SU");
 					
-					aksldlkaskdjasjkdaskldkjasldjalsdklas.writeBytes("mv " + ASDAJSHDASKDJASHKDAAUISD + " " + ASDASDIASUDQOWOIEQEOIQWUE + "\n");
-					aksldlkaskdjasjkdaskldkjasldjalsdklas.flush();
-					aksldlkaskdjasjkdaskldkjasldjalsdklas.writeBytes("exit\n");
-					aksldlkaskdjasjkdaskldkjasldjalsdklas.flush();
+					dataOutputStream.writeBytes("mv " + SDCARD_KEY + " " + PATH_KEY + "\n");
+					dataOutputStream.flush();
+					dataOutputStream.writeBytes("exit\n");
+					dataOutputStream.flush();
 					
 					try {
-						jkasdjkasjdashdjkashqwuehiqwieuqwheq.waitFor();
+						su.waitFor();
 					}
 					
-					catch (InterruptedException kjasdjkasdjkajskdjasjdajsk) {
-						kjasdjkasdjkajskdjasjdajsk.printStackTrace();
+					catch (InterruptedException e) {
+						e.printStackTrace();
 					}
 				}
 
-				catch (FileNotFoundException ajsdjkajskdjasjkdsajasjsaj) {
+				catch (FileNotFoundException e) {
 					Log.e("FaceNiffKey", "CAN NOT WRITE KEY FILE");
-					ajsdjkajskdjasjkdsajasjsaj.printStackTrace();
+					e.printStackTrace();
 				}
 				
-				catch (IOException kaskdskalkdsklasdkladskldskaksad) {
-					kaskdskalkdsklasdkladskldskaksad.printStackTrace();
+				catch (IOException e) {
+					e.printStackTrace();
 				}
 
 				finally {
-					if (kjasjdajsdjajsjdquyweuiqiweioqwioeioqw != null) {
+					if (fileOutputStream != null) {
 						try {
-							kjasjdajsdjajsjdquyweuiqiweioqwioeioqw.close();
+							fileOutputStream.close();
 						}
 						
-						catch (IOException jkasdjajksdjkajsdjkasjkdjkasjkdjkas) {
-							jkasdjajksdjkajsdjkasjkdjkasjkdjkas.printStackTrace();
+						catch (IOException e) {
+							e.printStackTrace();
 						}
 					}
 				}
 			}
 		}
 		
-		catch (NoSuchAlgorithmException aklsdkjaslkdjaksldjaskldjalkasdljsa) {
-			aklsdkjaslkdjaksldjaskldjalkasdljsa.printStackTrace();
+		catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
 		}
 	}
 }
